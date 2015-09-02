@@ -1,0 +1,27 @@
+{
+  "name": "myojs-hardtap",
+  "version": "0.0.0",
+  "description": "A plugin for myo.js that detects when the user physically double taps the myo",
+  "main": "hardtap.myo.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/thalmiclabs/myojs-hardtap.git"
+  },
+  "keywords": [
+    "myo",
+    "myo.js",
+    "hardtap",
+    "hard tap",
+    "double tap",
+    "tap"
+  ],
+  "author": "Scott Tolksdorf",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thalmiclabs/myojs-hardtap/issues"
+  },
+  "homepage": "https://github.com/thalmiclabs/myojs-hardtap"
+}

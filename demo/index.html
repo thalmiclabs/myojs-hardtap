@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.min.js"></script>
+
+		<script src='myo.js'></script>
+		<script src='../hardtap.myo.js'></script>
+
+		<link href="diagnosticsStyle/base.css" rel="stylesheet">
+		<link rel="icon" href="diagnosticsStyle/img/favicon.ico" type="image/x-icon" />
+		<script src='diagnosticsStyle/graph.js'></script>
+
+		<style>
+
+
+		</style>
+	</head>
+	<body>
+		<title>Hard Tap Demo - Myo.js</title>
+		<h1>
+			Hard Tap Demo for Myo.js
+			<a href='https://github.com/thalmiclabs/myojs-hardtap'><small>Project here</small></a>
+		</h1>
+		<p>
+			hardtap.myo.js emits a "hard_tap" event when the user physically double taps the myo.
+		</p>
+
+	</body>
+	<script>
+		Myo.connect();
+
+	</script>
+</html>

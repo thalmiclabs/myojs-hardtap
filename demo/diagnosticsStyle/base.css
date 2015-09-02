@@ -1,0 +1,88 @@
+
+/*
+	##Colors
+	dark   - #10161d
+	blue   - #58bccc
+	teal   - #04fbec
+	yellow - #ebf1be
+	red    - #c14b2a
+	green  - #8aceb5
+	orange - #d2833c
+
+*/
+@font-face {
+	font-family : 'myo_diagnostics';
+	font-style  : normal;
+	font-weight : normal;
+	src         : url('myo-diagnostics.ttf');
+}
+html, body{
+	width   : 100%;
+	margin  : 0;
+	padding : 0;
+}
+body{
+	box-sizing  : border-box;
+	padding     : 50px;
+	background  : #10161d url('img/dot_grid.png');
+	font-family : 'myo_diagnostics';
+	color       : #58bccc;
+	line-height : 20px;
+}
+h1{
+	font-size : 3em;
+}
+small{
+	font-size      : 0.4em;
+	text-transform : uppercase;
+}
+a{
+	color : #d2833c;
+}
+p{
+	max-width : 600px;
+	font-size : 1.2em;
+}
+button{
+	padding        : 10px 20px;
+	cursor         : pointer;
+	background     : transparent;
+	font-family    : 'myo_diagnostics';
+	font-size      : 0.6em;
+	color          : #04fbec;
+	text-transform : uppercase;
+	border         : 1px solid #04fbec;
+	outline        : none;
+}
+button:hover{
+	background-color : #04fbec;
+	color            : #10161d;
+}
+label{
+	display : inline-block;
+	width   : 100px;
+}
+.graph{
+	height : 200px;
+	width  : 500px;
+}
+.warningPulse{
+	animation                 : pulse 2s ease-out;
+	animation-iteration-count : infinite;
+}
+@keyframes pulse {
+	0%   {opacity : 1}
+	50%  {opacity : 0.1}
+	100% {opacity : 1}
+}
+input[type='text'], textarea{
+	background-color : #10161d;
+	font-family : 'myo_diagnostics';
+	border : 1px solid #04fbec;
+	padding : 15px;
+	color       : #58bccc;
+	outline: none;
+}
+input[type='text']:focus, textarea:focus{
+	border-color : #d2833c;
+}
