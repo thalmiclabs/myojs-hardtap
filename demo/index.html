@@ -6,6 +6,7 @@
 		<script src="http://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.min.js"></script>
 
 		<script src='myo.js'></script>
+		<script src='busyarm.myo.js'></script>
 		<script src='../hardtap.myo.js'></script>
 
 		<link href="diagnosticsStyle/base.css" rel="stylesheet">
@@ -14,6 +15,84 @@
 
 		<style>
 
+		.hardTap{
+			width : 500px;
+			text-align: center;
+			margin-bottom: 30px;
+			opacity : 0.3;
+		}
+		.hardTap .text{
+			color : #8aceb5;
+			text-transform: uppercase;
+			font-size: 3em;
+			visibility: hidden;
+		}
+
+		.hardTap.show{
+			opacity : 1;
+		}
+		.hardTap.show .text{
+			visibility: visible;
+		}
+
+		svg{
+			width : 200px;
+		}
+		svg path{
+			stroke : #8aceb5;
+			fill : transparent;
+		}
+
+		.tapContainer{
+
+			position : relative;
+			height : 20px;
+			width : 400px;
+			border : 1px solid #58bccc;
+			display: inline-block;
+			vertical-align: middle;
+		}
+
+		.tapBar{
+			position: relative;
+			background-color : #d2833c;
+			opacity : 0.4;
+			height : 100%;
+			width : 0px;
+		}
+
+		.hardTapZone{
+			position: absolute;
+			top:0px;
+			height : 100%;
+			left : 80px;
+			width : 220px;
+			background-color: #8aceb5;
+			opacity : 0.1;
+		}
+
+		.min{
+			position: absolute;
+			top : 100%;
+			left : 75px;
+		}
+		.max{
+			position: absolute;
+			top : 100%;
+			left : 290px;
+		}
+
+		.busyArm{
+			display: inline-block;
+			visibility: hidden;
+			color : #c14b2a;
+			vertical-align: middle;
+			font-size: 1.2em;
+			margin-left: 30px;
+		}
+		.busyArm.show{
+			visibility: visible;
+		}
 
 		</style>
 	</head>
@@ -27,9 +106,83 @@
 			hardtap.myo.js emits a "hard_tap" event when the user physically double taps the myo.
 		</p>
 
+
+		<div class='hardTap'>
+			<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 48 60" enable-background="new 0 0 48 48" xml:space="preserve"><g><g><path fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" d="M22.3,25.6l-8.6-14.8c-0.9-1.5-2.8-2-4.3-1.1l0,0    c-1.5,0.9-2,3-1.1,4.5l12.6,21.6l-8.1-1.8c0,0-3.7,0.1-4,3.4c-0.3,3.3,6.8,3,6.8,3s6.9,0.7,11.5,5.2S39.5,43,39.5,43    s3.9-2.1,6-3.5s2.1-6.4-0.7-11.3l-8.1-13.8c-0.9-1.5-2.8-2.1-4.2-1.2l0,0c-1.4,0.9-1.8,2.9-0.9,4.4l2,3.3"/><path fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" d="M21.8,24.7L19,19.9c-0.9-1.5-0.5-3.5,0.9-4.4l0,0    c1.4-0.9,3.3-0.4,4.2,1.2l3.1,5.3"/><path fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" d="M27.2,22L25,18.2c-0.9-1.5-0.5-3.5,0.9-4.4l0,0    c1.4-0.9,3.3-0.4,4.2,1.2l2.4,4.1"/></g><path fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" d="M11.1,19c-0.4,0.1-0.9,0.1-1.3,0.1   c-4.8,0-8.8-4.1-8.8-9.1S4.9,1,9.8,1s8.8,4.1,8.8,9.1c0,1.9-0.6,3.8-1.6,5.2"/></g></svg>
+			<div class='text'>Hard Tap!</div>
+		</div>
+
+
+		<div style='margin-bottom : 40px;'>
+			<div class='tapContainer'>
+				<div class='hardTapZone'></div>
+				<div class='tapBar'></div>
+				<div class='min'>80ms</div>
+				<div class='max'>300ms</div>
+			</div>
+
+			<div class='busyArm'>Arm too busy!</div>
+		</div>
+		<div class='tapGraph graph'></div>
+
 	</body>
 	<script>
 		Myo.connect();
+
+		var tapGraph = createGraph({
+			resolution : 100,
+			element : '.tapGraph',
+			initialData : {yz_delta :0, threshold : Myo.plugins.hardtap.threshold},
+			range : [0, 4]
+		});
+
+		Myo.on('accelerometer', function(data){
+			var last = this.lastIMU.accelerometer;
+			var delta = Math.abs(Math.abs(last.y) - Math.abs(data.y)) + Math.abs(Math.abs(last.z) - Math.abs(data.z));
+
+			tapGraph.add({
+				yz_delta : delta,
+				threshold : Myo.plugins.hardtap.threshold
+			});
+		});
+
+
+		var clearTapBar = function(){
+			clearInterval(timer);
+			time = 0;
+			$('.tapBar').css({width : time});
+		}
+
+		Myo.on('hard_tap', function(){
+			clearTapBar();
+
+			$('.hardTap').addClass('show');
+			setTimeout(function(){
+				$('.hardTap').removeClass('show');
+			}, 800);
+		});
+
+
+		var timer;
+		var time = 0;
+		Myo.on('tap', function(){
+			time = 0;
+			clearInterval(timer);
+			timer = setInterval(function(){
+				time += 5;
+				$('.tapBar').css({width : time});
+				if(time > 400){
+					clearTapBar();
+				}
+			}, 5);
+		});
+
+		Myo.on('arm_busy', function(){
+			$('.busyArm').addClass('show');
+		});
+		Myo.on('arm_rest', function(){
+			$('.busyArm').removeClass('show');
+		});
 
 	</script>
 </html>
